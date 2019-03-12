@@ -4,7 +4,7 @@
 Códigos de R para ejercicios en clase y sus respectivos CSV.
 
 ## Indice
-1. [Regresión Lineal](https://github.com/ramonescobar/BAS2019/blob/master/CodigoRegresionLineal.R) - [CSV](https://github.com/ramonescobar/BAS2019/blob/master/assets/ToyotaCorolla.csv)
+1. Regresión Lineal [Link](https://github.com/ramonescobar/BAS2019/blob/master/CodigoRegresionLineal.R) - CSV [Link](https://github.com/ramonescobar/BAS2019/blob/master/assets/ToyotaCorolla.csv)
 
-2. [Regresión Logística](https://github.com/ramonescobar/BAS2019/blob/master/RegresionLogistica.R) - [CSV](https://github.com/ramonescobar/BAS2019/blob/master/assets/UniversalBank.csv)
+2. Regresión Logística [link](https://github.com/ramonescobar/BAS2019/blob/master/RegresionLogistica.R) - CSV [Link](https://github.com/ramonescobar/BAS2019/blob/master/assets/UniversalBank.csv)
 
