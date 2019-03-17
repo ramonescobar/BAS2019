@@ -30,12 +30,12 @@ str(bank.df)
 
 # Busquemos nulos
 sapply(bank.df, function(x) round(sum(is.na(x))/length(x)*100,4))
-
 # Para variables numericas, podemos utilizar summary()
 summary(bank.df)
 
 # Agregar factor a variables categoricas
-bank.df$Education <- factor(bank.df$Education, levels = c(1, 2, 3),
+bank.df$Education <- factor(bank.df$Education, 
+                            levels = c(1, 2, 3),
                             labels = c("Undergrad", "Graduate", "Advanced/Professional"))
 bank.df$Securities.Account <- as.factor(bank.df$Securities.Account)
 bank.df$CD.Account <- as.factor(bank.df$CD.Account)
@@ -47,12 +47,11 @@ bank.df$Personal.Loan <- as.factor(bank.df$Personal.Loan)
 table(bank.df$Education)
 table(bank.df$Education)/nrow(bank.df)*100
 
-# Variablas tablas de una sola vez, las variables deben de ser factor para funcionar
+# Creamos un bucle que nos permita obtner tablas cruzadas
 factorvar <- sapply(bank.df, is.factor)
-for (i in 1:length(factorvar))
-{
-  if(factorvar[i]==TRUE)
-  {
+
+for (i in 1:length(factorvar)){
+  if(factorvar[i]==TRUE){
     cat(paste("
               Table for ", names(factorvar[i]), sep=""))
     print(table(bank.df[,i]))
@@ -61,7 +60,7 @@ for (i in 1:length(factorvar))
 }
 
 # Analisis de correlaciones
-mat_cor <- cor(x= bank.df [,sapply(bank.df, is.numeric)])
+mat_cor <- cor(x= bank.df[,sapply(bank.df, is.numeric)])
 
 corrplot(mat_cor,
          type="upper",
@@ -77,10 +76,9 @@ corrplot(mat_cor,
 
 # Podemos hacer un agrupamiento y revisar promedios por grupo
 numericvar <- sapply(bank.df, is.numeric)
-for (i in 1:length(numericvar))
-{
-  if(numericvar[i]==TRUE)
-  {
+
+for (i in 1:length(numericvar)){
+  if(numericvar[i]==TRUE){
     print(paste("Aggregate for ", names(numericvar[i]), sep=""))
     print(aggregate(bank.df[,i], by=list(bank.df$Personal.Loan), FUN=mean))
   }
@@ -88,10 +86,8 @@ for (i in 1:length(numericvar))
 
 # Ahora tablas cruzadas
 factorvar <- sapply(bank.df, is.factor)
-for (i in 1:length(factorvar))
-{
-  if(factorvar[i]==TRUE)
-  {
+for (i in 1:length(factorvar)){
+  if(factorvar[i]==TRUE){
     print(table(bank.df$Personal.Loan, bank.df[,i], dnn=c("Loan", names(factorvar[i]))))
     print(prop.table(table(bank.df$Personal.Loan, bank.df[,i], dnn=c("Loan", names(factorvar[i]))),1)*100)
   }
@@ -125,19 +121,28 @@ importance <- varImp(logit.reg)
 
 ######## 5 - Revisando predicciones ########
 # Hacer predicciones
-logit.reg.pred <- predict(logit.reg, valid.df, type = "response")
+logit.reg.pred <- predict(object=logit.reg, 
+                          valid.df, type = "response")
 
 # Para calcular el r2 
 basereg <- glm(Personal.Loan ~ 1, data = train.df, family = "binomial")
+summary(basereg)
 1-(logLik(logit.reg))/(logLik(basereg))
 
 ######## 6 - Curva ROC ########
 # Roc Curve
-pred <- prediction(logit.reg.pred, valid.df$Personal.Loan)
-perf <- performance(pred, measure = "tpr", x.measure = "fpr") 
+pred <- prediction(predictions=logit.reg.pred, 
+                   labels = valid.df$Personal.Loan)
+
+perf <- performance(pred, 
+                    measure = "tpr", 
+                    x.measure = "fpr") 
+
 par(mar=c(5,5,2,2),xaxs = "i",yaxs = "i",cex.axis=1.3,cex.lab=1.4)
 plot(perf, col=rainbow(10))
 abline(a=0, b= 1)
+
+#Calculando Area under curve
 auc <- round(as.numeric(performance(pred,"auc")@y.values),2)
 auc_value <- paste("AUC= ", auc, sep="")
 legend(0.7,0.2,auc_value,border="white",cex=1,box.col = "white")
@@ -148,6 +153,7 @@ grid(nx = 10, ny = NULL, col = "lightgray", lty = "dotted")
 pred <- prediction(logit.reg.pred, valid.df$Personal.Loan)
 perf <- performance(pred, x.measure = "prec", measure = "rec")
 
+#Maximiza el F1 Score en pred
 opt.cut = function(perf, pred){
   cut.ind = mapply(FUN=function(x, y, p){
     d = (2*(x*y))/(x+y)
