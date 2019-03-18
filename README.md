@@ -8,3 +8,4 @@ Códigos de R para ejercicios en clase y sus respectivos CSV.
 
 2. Regresión Logística [link](https://github.com/ramonescobar/BAS2019/blob/master/RegresionLogistica.R) - CSV [Link](https://github.com/ramonescobar/BAS2019/blob/master/assets/UniversalBank.csv)
 
+3. K-means [Link](https://github.com/ramonescobar/BAS2019/blob/master/KMeans.R) - CSV [Link](https://github.com/ramonescobar/BAS2019/blob/master/assets/ToyotaCorolla.csv)
